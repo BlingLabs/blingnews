@@ -14,7 +14,7 @@ def build_rss_data_verge(verge_feed):
 def build_rss_data_engadget(engadget_feed):
   rss_data = []
   for item in engadget_feed.entries:
-    rss_data.append((item.title,item.link,item.category))
+    rss_data.append((item.title,item.link,[tag.term for tag in item.tags]))
   return rss_data
 
 def find_tags_verge(site_url):
