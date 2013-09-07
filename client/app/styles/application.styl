@@ -1,0 +1,119 @@
+@import 'nib'
+@import 'library'
+
+$white = #FFFFFF
+$light-gray = #DDDDDD
+$gray = #999999
+$dark-gray = #666666
+$black = #232323
+$light-yellow = #FFFCF4
+$yellow = #FFFAE6
+
+@font-face {
+  font-family: 'Museo300Regular';
+  src: url('../fonts/Museo300-Regular-webfont.eot');
+  src: url('../fonts/Museo300-Regular-webfont.eot?#iefix') format('embedded-opentype'),
+       url('../fonts/Museo300-Regular-webfont.woff') format('woff'),
+       url('../fonts/Museo300-Regular-webfont.ttf') format('truetype'),
+       url('../fonts/Museo300-Regular-webfont.svg#Museo300Regular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Museo500Regular';
+  src: url('../fonts/Museo500-Regular-webfont.eot');
+  src: url('../fonts/Museo500-Regular-webfont.eot?#iefix') format('embedded-opentype'),
+       url('../fonts/Museo500-Regular-webfont.woff') format('woff'),
+       url('../fonts/Museo500-Regular-webfont.ttf') format('truetype'),
+       url('../fonts/Museo500-Regular-webfont.svg#Museo500Regular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  margin: 0;
+  anti-aliasing();
+  background-color: $white;
+  font-family: 'Museo300Regular', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: normal;
+  font-size: 62.5%;
+  color: $gray;
+  letter-spacing: 1px;
+}
+
+.container {
+  margin: 0 auto;
+  width: 100%;
+  font-size: 1.7em, 1.5em, 1.7em;
+  line-height: 1.6;
+}
+
+.content {
+  margin: 0 auto;
+  max-width: 100em;
+}
+
+.side {
+  width: 100%, 40%, 30%;
+
+  .header {
+    padding: 2em;
+    color: $white;
+    background-color: $black;
+    text-align: center, left, left;
+  }
+
+  ul.articles {
+    margin: 0;
+    padding: 0;
+    overflow: scroll;
+    -webkit-overflow-scrolling: touch;
+
+    li {
+      background-color: $yellow;
+      border-bottom-style: solid;
+      border-bottom-width: 1px;
+      border-bottom-color: $light-gray;
+      cursor: pointer;
+      list-style-type: none;
+      padding: 2em;
+      transition: 0.25s;
+
+      &:hover {
+        background: $light-yellow;
+      }
+    }
+  }
+}
+
+.main {
+  background-color: $white;
+  width: 100%, 60%, 70%;
+  padding: 3em 3em, 3em 6em, 4em 8em;
+  overflow: scroll;
+  -webkit-overflow-scrolling: touch;
+  left: -100%;
+  position: absolute, static, static;
+
+  .endbar {
+    margin: 3em 0;
+    padding: 1em 1.5em;
+    background-color: $black;
+  }
+
+  .mobile-dismiss {
+    visibility: visible, hidden, hidden;
+    position: absolute;
+    top: 2em;
+    left: 2em;
+  }
+}
+
+h1 {
+  color: $black;
+  font-size: 1.8em;
+  line-height: 1.4;
+  margin-top: 0em; // WHAT THE F*** IS THIS S*** SARAH?
+  margin-bottom: 1.5em;
+}

@@ -1,0 +1,82 @@
+@import 'nib'
+
+/*
+ * Responsive Mixins
+ */
+responsive(prop, phone, tablet, desktop) {
+  @media only screen {
+    {prop}: desktop;
+  }
+
+  @media only screen and (max-width: 54em) {
+    {prop}: tablet;
+  }
+
+  @media only screen and (max-width: 38em) {
+    {prop}: phone;
+  }
+}
+
+responsive-prop(prop, phone, tablet, desktop) {
+  if (tablet and desktop) {
+    responsive: prop, phone, tablet, desktop;
+  } else {
+    {prop}: phone;
+  }
+}
+
+font-size(phone, tablet = null, desktop = null) {
+  responsive-prop: 'font-size', phone, tablet, desktop;
+}
+
+width(phone, tablet = null, desktop = null) {
+  responsive-prop: 'width', phone, tablet, desktop;
+}
+
+padding(phone, tablet = null, desktop = null) {
+  responsive-prop: 'padding', phone, tablet, desktop;
+}
+
+text-align(phone, tablet = null, desktop = null) {
+  responsive-prop: 'text-align', phone, tablet, desktop;
+}
+
+position(phone, tablet = null, desktop = null) {
+  responsive-prop: 'position', phone, tablet, desktop;
+}
+
+visibility(phone, tablet = null, desktop = null) {
+  responsive-prop: 'visibility', phone, tablet, desktop;
+}
+
+left(phone, tablet = null, desktop = null) {
+  responsive-prop: 'left', phone, tablet, desktop;
+}
+
+anti-aliasing(red-component = 255, blue-component = 255, green-component = 255, radius = 0.15) {
+  -webkit-font-smoothing: antialiased;
+  text-shadow: 0 1px 1px rgba(red-component, blue-component, green-component, radius);
+}
+
+/*
+ * Dead Simple Grid
+ */
+
+.col {
+  float: left;
+  width: 100%;
+  padding: 0 0em;
+  box-sizing: border-box;
+}
+
+.row .row {
+  margin: 0 0em;
+}
+
+.row:before .row:after {
+  content: '';
+}
+
+.row:after {
+  clear: both;
+}
