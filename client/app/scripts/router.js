@@ -1,0 +1,3 @@
+NewsClient.Router.map(function () {
+  
+});
