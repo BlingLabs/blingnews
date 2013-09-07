@@ -1,6 +1,10 @@
 import webapp2
-from prediction import Prediction
+
+import prediction
 import rss_collector
+import scraper
+
+
 class MainPage(webapp2.RequestHandler):
   def get(self):
     self.response.headers['Content-Type'] = 'text/plain'
@@ -9,5 +13,6 @@ class MainPage(webapp2.RequestHandler):
 
 application = webapp2.WSGIApplication([
   ('/', MainPage),
-  ('/prediction', Prediction)
+  ('/prediction', prediction.Prediction),
+  (prediction.decorator.callback_path, prediction.decorator.callback_handler()) #Oauth dance
 ], debug=True)

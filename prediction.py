@@ -2,8 +2,10 @@ import httplib2
 import urllib
 import urllib2
 import webapp2
-from oauth2client.appengine import AppAssertionCredentials
 from apiclient.discovery import build
+from oauth2client.appengine import AppAssertionCredentials
+from oauth2client.appengine import OAuth2Decorator
+from google.appengine.api import memcache
 
 
 # Other constants
@@ -11,6 +13,9 @@ PROJECT_ID = '777306444769'
 MODEL_ID = 'bling_engine'
 MODEL_TYPE = 'CLASSIFICATION'
 API_KEY = 'AIzaSyAX73uRLc69VmoyIv_qkSw9p1mmxkAnqgc'
+OAUTH_SCOPE = 'https://www.googleapis.com/auth/prediction'
+OAUTH_CLIENT_ID = '777306444769.apps.googleusercontent.com'
+OAUTH_CLIENT_SECRET = 'Gn9rKtfjep-uvGMd_UuH6Bp-'
 
 # Define API calls
 # Creates a trained model
@@ -18,18 +23,26 @@ API_INSERT = 'https://www.googleapis.com/prediction/v1.6/projects/%(project_id)s
 API_GET = 'https://www.googleapis.com/prediction/v1.6/projects/%(project_id)s/trainedmodels/%(model_id)s' % {'project_id': PROJECT_ID, 'model_id': MODEL_ID}
 
 
+decorator = OAuth2Decorator(
+    client_id=OAUTH_CLIENT_ID,
+    client_secret=OAUTH_CLIENT_SECRET,
+    scope=OAUTH_SCOPE)
+
+http = httplib2.Http(memcache)
+service = build('prediction', 'v1.6', http=http)
+
 class Prediction(webapp2.RequestHandler):
+  @decorator.oauth_aware
   def get(self):
-    http = AppAssertionCredentials('https://www.googleapis.com/auth/prediction').authorize(httplib2.Http())
-    service = build('prediction', 'v1.6', http=http)
 
-    result = service.hostedmodels().predict(project='414649711441', hostedModelName='sample.sentiment', body={'input': {'csvInstance': ['hello']}}).execute()
-
-    #result = service.trainedmodels().get(id=
-
-    self.response.headers['Content-Type'] = 'text/plain'
-    self.response.write('prediction')
-    self.response.out.write('Result: ' + repr(result))
+    if decorator.has_credentials():
+      self.response.headers['Content-Type'] = 'text/plain'
+      self.response.write('prediction')
+      http = decorator.http()
+      result = service.trainedmodels().get(id=MODEL_ID, project=PROJECT_ID).execute(http=http)
+      self.response.out.write('Result: ' + repr(result))
+    else:
+      self.redirect(decorator.authorize_url())
 
 
 def create_model():
