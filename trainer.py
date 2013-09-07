@@ -1,7 +1,7 @@
 import os
 import rss_collector as collector
 def initialize_training_file(name):
-  data_dir = '/testdata/'
+  data_dir = './testdata/'
   if not os.path.exists(data_dir):
       os.makedirs(data_dir)
   out = open(data_dir + name + '.csv', 'w')
@@ -10,7 +10,7 @@ def initialize_training_file(name):
 def run_training(output_file):
   # get user age and gender first
   age = raw_input("Enter age: ")
-  gender = string(raw_input("Enter gender: "))
+  gender = raw_input("Enter gender: ")
 
   training_data = collector.get_rss_data()
   for entry in training_data:
@@ -21,9 +21,9 @@ def run_training(output_file):
       print (title)
       print (tags)
       answer = input("Do you like this article? (1 or 0): ")
-      output_file.write(answer+","+age+","+gender+","+tags)
+      output_file.write(str(answer)+","+str(age)+","+gender+","+str(tags)+"\n")
 
-
+  output_file.close()
 
 output_file = initialize_training_file('jon')
 run_training(output_file)
