@@ -67,7 +67,8 @@ body {
   ul.articles {
     margin: 0;
     padding: 0;
-    overflow: scroll;
+    overflow-y: scroll;
+    overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
 
     li {
@@ -91,14 +92,15 @@ body {
   background-color: $white;
   width: 100%, 60%, 70%;
   padding: 3em 3em, 3em 6em, 4em 8em;
-  overflow: scroll;
+  overflow-y: scroll;
+  overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   left: -100%;
   position: absolute, static, static;
 
   .endbar {
     margin: 3em 0;
-    padding: 1em 1.5em;
+    padding: 1em 1.5em, null, null;
     background-color: $black;
   }
 
