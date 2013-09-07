@@ -4,7 +4,7 @@
   "dependencies": {
     "jquery": "~1.9.1",
     "ember": "~1.0.0",
-    "ember-data": "~1.0.0",
+    "ember-data-shim": "~1.0.0",
     "handlebars": "~1.0.0"
   },
   "devDependencies": {
