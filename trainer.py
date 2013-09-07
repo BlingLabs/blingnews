@@ -20,7 +20,7 @@ def run_training(output_file):
       title,link,tags = article
       print (title)
       print (tags)
-      answer = input("Do you like this article? (1 or 0): ")
+      answer = raw_input("Do you like this article? (1 or 0): ")
       output_file.write(str(answer)+","+str(age)+","+gender+","+str(tags)+"\n")
 
   output_file.close()
