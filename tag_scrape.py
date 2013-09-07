@@ -2,11 +2,24 @@ from urllib import urlopen
 import string
 import re
 import feedparser
+from future import Future
 
-def find_tags(site_url):
-  print("running scrape")
+def build_rss_data_verge(verge_feed):
+  rss_data = []
+  for entry in verge_feed.entries:
+    data = entry.title,entry.link,find_tags_verge(entry.link)
+    rss_data.append(data)
+  return rss_data
+
+def build_rss_data_engadget(engadget_feed):
+  rss_data = []
+  for item in engadget_feed.entries:
+    rss_data.append((item.title,item.link,item.category))
+  return rss_data
+
+def find_tags_verge(site_url):
+  # need to get all the feed
   site_to_scrape = urlopen(site_url)
-  # site_url = "testpage.html"
 
   # dump site html
   # site_to_scrape = open(site_url,'r')
@@ -17,19 +30,25 @@ def find_tags(site_url):
   matches = re.findall(pattern,page_html)
   return matches
 
-def run_tag_scrape():
-  # parse the rss link
-  rss_url = "http://www.theverge.com/rss/index.xml"
-  feed = feedparser.parse(rss_url)
 
-  # get list of all links, titles, tags
+def run_tag_scrape():
+  feeds = get_entries()
+  return feeds
+
+  # return rss_data
+
+
+def get_entries():
+  feeds_list = {"http://www.theverge.com/rss/index.xml": "verge", "http://www.engadget.com/rss.xml":"engadget"}
+
+  # pull down all feeds
+  future_calls = [(Future(feedparser.parse,x),feeds_list.get(x)) for x in feeds_list.keys()]
+  # blocks until all feeds received
+  feeds = [(future_obj(),value) for future_obj,value in future_calls]
+
   rss_data = []
-  for entry in feed.entries:
-    data = entry.title,entry.link,find_tags(entry.link)
-    rss_data.append(data)
+  for feed,source_name in feeds:
+    rss_data.append((source_name, globals()["build_rss_data_" + source_name](feed)))
 
   return rss_data
-
-
-
 
