@@ -31,14 +31,7 @@ def find_tags_verge(site_url):
   return matches
 
 
-def run_tag_scrape():
-  feeds = get_entries()
-  return feeds
-
-  # return rss_data
-
-
-def get_entries():
+def get_rss_data():
   feeds_list = {"http://www.theverge.com/rss/index.xml": "verge", "http://www.engadget.com/rss.xml":"engadget"}
 
   # pull down all feeds

@@ -1,14 +1,10 @@
 import webapp2
-
-import tag_scrape
 from prediction import Prediction
-
-
+import rss_collector
 class MainPage(webapp2.RequestHandler):
   def get(self):
     self.response.headers['Content-Type'] = 'text/plain'
-    self.response.write('Hello, World!')
-    self.response.write(scraper.run_tag_scrape())
+    self.response.write(rss_collector.get_rss_data())
 
 
 application = webapp2.WSGIApplication([
