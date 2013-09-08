@@ -97,13 +97,68 @@ body {
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   left: 100%;
-  position: absolute, static, static;
+  position: fixed, static, static;
   transition: 0.5s;
 
   .endbar {
     margin: 3em 0;
     padding: 1em 1.5em, null, null;
     background-color: $black;
+
+    .vote {
+      display: inline-block;
+      width: 2em;
+      height: 2em;
+      background-position: -2em;
+      background-size: cover;
+      vertical-align: middle;
+      opacity: 0.8;
+      transition: 0.25s;
+
+      &.yes {
+        background-image: url('../images/yes.svg');
+      }
+
+      &.no {
+        background-image: url('../images/no.svg');
+      }
+
+      &.clicked {
+        background-position: 0;
+      }
+    }
+
+    .vote-top {
+      cursor: pointer;
+      display: inline-block;
+      width: 2em;
+      height: 2em;
+      background-position: -2em;
+      background-size: cover;
+      margin: 0 0 0 -2.4em;
+      opacity: 1;
+      vertical-align: middle;
+      transition: 0.2s;
+      transform: scale(1);
+
+      .yes {
+        background-image: url('../images/yes.svg');
+      }
+
+      .no {
+        background-image: url('../images/no.svg');
+      }
+
+      &:hover {
+        opacity: 0;
+      }
+
+      &.clicked {
+        background-position: 0;
+        transform: scale(6);
+        opacity: 0;
+      }
+    }
   }
 
   .mobile-dismiss {
@@ -135,3 +190,20 @@ h1 {
   margin-top: 0em; // WHAT THE F*** IS THIS S*** SARAH?
   margin-bottom: 1.5em;
 }
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #dedede;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #bebebe;
+}
+
+::-webkit-scrollbar-thumb:window-inactive {
+  background: rgba(255,0,0,0.4);
+}
+

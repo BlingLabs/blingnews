@@ -3,29 +3,30 @@
         <div class="header">
             Top News Today for Sarah Hum
         </div>
-        {{#view "App.SidebarView" tagName="ul" classNames="articles"}}
-            {{#each article in articles}}
+        {{#view "App.SidebarView" controllerBinding="articles" tagName="ul" classNames="articles"}}
+            {{#each article in content}}
                 <li {{action "open" article}}>
                     {{article.title}}
                 </li>
             {{/each}}
         {{/view}}
     </div>
-    {{#view "App.ArticleView" classNameBindings=":main :col articles.activeArticle:visible"}}
-        {{#if articles.activeArticle}}
+
+    {{#view "App.ArticleView" controllerBinding="articles" classNameBindings=":main :col articles.mobileVisible:visible"}}
+        {{#if activeArticle}}
             <button {{action "dismiss"}} class="mobile-dismiss">></button>
             <h1>
-                {{articles.activeArticle.title}}
+                {{activeArticle.title}}
             </h1>
 
-            {{articles.activeArticle.body}}
+            {{activeArticle.body}}
 
             <div class="endbar">
                 Did you like this article?
-                <span class="yes"></span>
-                <span class="yes-top"></span>
-                <span class="no"></span>
-                <span class="no-top"></span>
+                <span class="vote yes"></span>
+                <span class="vote-top yes" {{action "like" activeArticle}}></span>
+                <span class="vote no"></span>
+                <span class="vote-top no" {{action "dislike" activeArticle}}></span>
             </div>
         {{else}}
             :(

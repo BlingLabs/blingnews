@@ -2,18 +2,26 @@ require('scripts/models/article');
 
 App.ArticlesController = Ember.ArrayController.extend({
   activeArticle: null,
+  mobileVisible: false,
+
+  content: function() {
+    return App.Article.find();
+  }.property(),
 
   actions: {
     open: function(article) {
       this.set('activeArticle', article);
+      this.set('mobileVisible', true);
     },
 
     dismiss: function() {
-      this.set('activeArticle', null);
-    }
-  },
+      this.set('mobileVisible', false);
+    },
 
-  content: function() {
-    return App.Article.find();
-  }.property()
+    like: function(article) {
+    },
+
+    dislike: function(article) {
+    }
+  }
 });
