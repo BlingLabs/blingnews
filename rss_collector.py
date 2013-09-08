@@ -3,6 +3,7 @@ import string
 import re
 import feedparser
 from future import Future
+from dateutil import parser as dateparser
 
 def build_rss_data_verge(verge_feed):
   rss_data = []
@@ -11,7 +12,7 @@ def build_rss_data_verge(verge_feed):
         'link': entry.link,
         'tags': find_tags_verge(entry.link),
         'body': entry.content[0].get('value'),
-        'date': entry.published
+        'date': str(dateparser.parse(entry.published))
         }
     rss_data.append(data)
   return rss_data
@@ -23,7 +24,7 @@ def build_rss_data_engadget(engadget_feed):
         'link': item.link,
         'tags': [tag.term for tag in item.tags],
         'body': item.description,
-        'date': item.published
+        'date': str(dateparser.parse(item.published))
         }
     rss_data.append(data)
   return rss_data
@@ -41,9 +42,21 @@ def find_tags_verge(site_url):
   matches = re.findall(pattern,page_html)
   return matches
 
+def build_rss_data_techcrunch(techcrunch_feed):
+  rss_data = []
+  for entry in techcrunch_feed.entries:
+    data = {'title':entry.title,
+        'link': entry.link,
+        'tags': [tag.term for tag in entry.tags],
+        'body': entry.description,
+        'date': str(dateparser.parse(entry.published))}
+    rss_data.append(data)
+
+  return rss_data
 
 def get_rss_data():
   feeds_list = {"http://www.theverge.com/rss/index.xml": "verge", "http://www.engadget.com/rss.xml":"engadget"}
+  feeds_list = {"http://feeds.feedburner.com/Techcrunch": "techcrunch"}
 
   # pull down all feeds
   future_calls = [(Future(feedparser.parse,x),feeds_list.get(x)) for x in feeds_list.keys()]

@@ -6,7 +6,6 @@ import rss_collector
 
 from google.appengine.ext.webapp import template
 
-
 class MainPage(webapp2.RequestHandler):
   def get(self):
     path = os.path.join(os.path.dirname(__file__), 'dist/index.html')
@@ -19,9 +18,5 @@ class MainPage(webapp2.RequestHandler):
 application = webapp2.WSGIApplication([
   ('/', MainPage),
   ('/prediction', prediction.Prediction),
-  ('/prediction/modelstatus', prediction.CheckModelStatus),
-  ('/prediction/predict', prediction.Predict),
-  ('/prediction/createmodel', prediction.CreateModel),
-  ('/prediction/updatemodel', prediction.UpdateModel),
   (prediction.decorator.callback_path, prediction.decorator.callback_handler()) #Oauth dance
 ], debug=True)
