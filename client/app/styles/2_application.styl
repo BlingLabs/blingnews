@@ -58,10 +58,21 @@ body {
   width: 100%, 40%, 30%;
 
   .header {
-    padding: 2em 2em 2em 3.7em, null, null;
+    padding: 2em 2em 2em 4.4em, null, null;
     color: $white;
     background-color: $black;
     text-align: center, left, left;
+
+    .logo {
+        width: 1.7em;
+        height: 1.6em;
+        vertical-align: middle;
+        margin: -0.2em 0.5em 0 -2.6em;
+    }
+
+    .logo:hover {
+        opacity: 0.8;
+    }
   }
 
   ul.articles {
@@ -99,6 +110,17 @@ body {
   left: 100%;
   position: fixed, static, static;
   transition: 0.5s;
+
+  .meta {
+    font-size: 0.8em;
+    margin: 0 0 4em 0;
+  }
+
+  .article-body {
+    img {
+      margin: 0 30px 15px 0 !important;
+    }
+  }
 
   .endbar {
     margin: 3em 0;
@@ -185,8 +207,8 @@ h1 {
   color: $black;
   font-size: 1.8em;
   line-height: 1.4;
-  margin-top: 0em; // WHAT THE F*** IS THIS S*** SARAH?
-  margin-bottom: 1.5em;
+  margin-top: 0em;
+  margin-bottom: 0em;
 }
 
 ::-webkit-scrollbar {
