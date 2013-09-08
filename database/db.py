@@ -60,7 +60,7 @@ class UserHandler(webapp2.RequestHandler):
   def get(self, user_id, attr):
     """ Get the specified attribute. """
 
-    if attr in ('fb_token', 'name'):
+    if attr in ('name'):
       result = self.get_simple_attr(user_id, attr)
     elif attr == 'articles':
       result = self.get_user_articles(user_id)
@@ -72,10 +72,12 @@ class UserHandler(webapp2.RequestHandler):
     json_resp = json.dumps({attr: str(result)})
     self.response.out.write(json_resp)
 
-  def get_user_articles(self, user_id)
+
+  def get_user_articles(self, user_id):
     pass
 
-  def get_simple_attr(self, user_id, attr)
+
+  def get_simple_attr(self, user_id, attr):
     conn = rdbms.connect(instance=INSTANCE_NAME, database=DATABASE_NAME)
     cursor = conn.cursor()
 
@@ -86,20 +88,21 @@ class UserHandler(webapp2.RequestHandler):
       return None
     result = cursor.fetchone()[0]
 
+
   def post(self):
     """ Create user.
 
       Args:
-        name
-        fb_token
+        id: string (fb token)
+        name: string
     """
+    id = self.request.get('id')
     name = self.request.get('name')
-    fb_token = self.request.get('fb_token')
 
     conn = rdbms.connect(instance=INSTANCE_NAME, database=DATABASE_NAME)
     cursor = conn.cursor()
-    SQL_CREATE_USER = r'INSERT INTO users (name, fb_token) VALUES (%s, %s)'
-    cursor.execute(SQL_CREATE_USER, (name, fb_token))
+    SQL_CREATE_USER = r'INSERT INTO users (id, name) VALUES (%s, %s)'
+    cursor.execute(SQL_CREATE_USER, (id, name))
 
     conn.commit()
     conn.close()
