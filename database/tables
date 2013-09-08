@@ -1,0 +1,37 @@
+CREATE DATABASE blingnews;
+
+CREATE TABLE articles (
+id int NOT NULL AUTO_INCREMENT,
+title varchar(255) NOT NULL,
+link varchar(255) NOT NULL,
+body TEXT NOT NULL,
+author varchar(255),
+source_id int NOT NULL,
+date DATE NOT NULL,
+PRIMARY KEY(id)
+);
+
+CREATE TABLE tags (
+article_id int NOT NULL,
+tag varchar(255) NOT NULL
+);
+
+CREATE TABLE users (
+id int NOT NULL AUTO_INCREMENT,
+name varchar(255),
+fb_token varchar(255),
+PRIMARY KEY(id)
+);
+
+CREATE TABLE sources (
+id int NOT NULL AUTO_INCREMENT,
+name varchar(255) NOT NULL
+);
+
+CREATE TABLE subscriptions (
+user_id int NOT NULL,
+source_id int NOT NULL
+);
+
+
+
