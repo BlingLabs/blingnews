@@ -105,11 +105,12 @@ class UserHandler(webapp2.RequestHandler):
     # Return everything about this user instead.
 
     name = self.get_simple_attr(user_id, 'name')
+    articles = self.get_user_articles(user_id)
 
     if name is None:
       json_resp = json.dumps([])
     else:
-      json_resp = json.dumps([{'name': name, 'fb_id': user_id}])
+      json_resp = json.dumps([{'name': name, 'articles': articles, 'fb_id': user_id}])
 
     self.response.out.write(json_resp)
 
@@ -135,24 +136,40 @@ class UserHandler(webapp2.RequestHandler):
       SQL_GET_ARTICLE_TAGS = 'SELECT tag FROM tags WHERE article_id = %s'
       cursor.execute(SQL_GET_ARTICLE_TAGS, (article_id))
 
+      article_obj = {
+          'id': article[0],
+          'title': article[1],
+          'link': article[2],
+          'body': article[3],
+          'author': article[4],
+          'source_id': article[5],
+          'date': article[6],
+          'source_name': article[8]
+      }
+
       for tag in cursor.fetchall():
-        result = p.Predict.predict(user_id, [tag[0]])
+        tag = tag[0]
+        result = p.predict(user_id, [tag])
+        print 'tag = ' + tag
         if result != None:
           if result.outputLabel == '1':
             # TODO:for now, If one tag passes, we pass.
             # keep score
             for r in result['outputMulti']:
               if r['label'] == '1':
-                score = r['score']
+                article_obj['score'] = score
 
             # Give this article to the user, in order of scores
             for i in range(0, recommended.len):
               if float(recommended[i].score) < float(score):
-                recommended.insert(i, {'score': score, 'article': article})
+                recommended.insert(i, article_obj)
+            break
         else:
           # If we can't predict, simply serve.
-          logging.debug('could not predict for tag=' + tag[0])
-          recommended.append({'score': 0, 'article': article})
+          logging.debug('could not predict for tag=' + tag)
+          article_obj['score'] = 0
+          recommended.append(article_obj)
+          break
 
     print recommended
     return recommended

@@ -177,37 +177,28 @@ class CheckModelStatus(webapp2.RequestHandler):
     result = service.trainedmodels().get(id=user_id, project=PROJECT_ID).execute(http=http)
     return result
 
-class Predict(webapp2.RequestHandler):
-  @decorator.oauth_aware
-  def get(self):
-    user_id = MODEL_ID
-    input = ['science']
-    result = self.predict(user_id, input)
-    self.response.headers['Content-Type'] = 'text/plain'
-    self.response.out.write('Result: ' + repr(result) + '\n')
 
+def predict(user_id, input):
+  """ Request a prediction
+    Args:
+      input: list of features ['feature1', (feature2)]
+  """
 
-  def predict(self, user_id, input):
-    """ Request a prediction
-      Args:
-        input: list of features ['feature1', (feature2)]
-    """
+  body = {
+      'input': {
+        'csvInstance': input
+      }
+  }
 
-    body = {
-        'input': {
-          'csvInstance': input
-        }
-    }
-    
-    try:
-      http = decorator.http()
-      result = service.trainedmodels().predict(project=PROJECT_ID, id=user_id, body=body).execute(http=http)
-      return result
-    except:
-      ## hack hack
-      pass
-    
-    return None
+  try:
+    http = decorator.http()
+    result = service.trainedmodels().predict(project=PROJECT_ID, id=user_id, body=body).execute(http=http)
+    return result
+  except:
+    ## hack hack
+    pass
+
+  return None
 
 
 def main():
