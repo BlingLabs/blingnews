@@ -57,19 +57,32 @@ class ArticleHandler(webapp2.RequestHandler):
 
 
 class UserHandler(webapp2.RequestHandler):
-  def get(self, user_id, attr):
+  def get(self):
     """ Get the specified attribute. """
+    user_id = self.request.get('id')
+    #attr = self.request.get('attr')
 
-    if attr in ('name'):
-      result = self.get_simple_attr(user_id, attr)
-    elif attr == 'articles':
-      result = self.get_user_articles(user_id)
-
-    if result is None:
-      logging.error('no result from db')
+    if re.match('[a-zA-z\d]+', user_id) is None:
+      logging.error('bad user id')
       self.error(400)
 
-    json_resp = json.dumps({attr: str(result)})
+    #if attr in ('name'):
+    #  result = self.get_simple_attr(user_id, attr)
+    #elif attr == 'articles':
+    #  result = self.get_user_articles(user_id)
+    #else:
+    #  result = None
+
+    # Return everything about this user instead.
+
+    name = self.get_simple_attr(user_id, 'name')
+
+    if name is None:
+      logging.error('no result from db')
+      self.error(400)
+      return
+
+    json_resp = json.dumps({'name': name, 'id': user_id})
     self.response.out.write(json_resp)
 
 
@@ -81,12 +94,15 @@ class UserHandler(webapp2.RequestHandler):
     conn = rdbms.connect(instance=INSTANCE_NAME, database=DATABASE_NAME)
     cursor = conn.cursor()
 
-    SQL_GET_ATTR = u'SELECT %s FROM users WHERE id = %s'
+    SQL_GET_ATTR = 'SELECT %s FROM users WHERE id = %s'
     cursor.execute(SQL_GET_ATTR % (attr, user_id))
 
     if cursor.rowcount == -1:
+      logging.error('no db result for attr ' + attr)
       return None
+
     result = cursor.fetchone()[0]
+    return result
 
 
   def post(self):

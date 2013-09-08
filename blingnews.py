@@ -19,7 +19,7 @@ class MainPage(webapp2.RequestHandler):
 application = webapp2.WSGIApplication([
   ('/', MainPage),
   ('/api/users', db.UserHandler), #create /api/user
-  ('/api/users/(\d)+/(.*)', db.UserHandler), #eg. get /api/user/123/name
+  ('/api/users/([0-9])+/(.*)', db.UserHandler), #eg. get /api/users/123/name
   ('/api/articles', db.ArticleHandler), #create /api/article
   ('/prediction', prediction.Prediction),
   (prediction.decorator.callback_path, prediction.decorator.callback_handler()) #Oauth dance
