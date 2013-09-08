@@ -198,9 +198,16 @@ class Predict(webapp2.RequestHandler):
           'csvInstance': input
         }
     }
-    http = decorator.http()
-    result = service.trainedmodels().predict(project=PROJECT_ID, id=user_id, body=body).execute(http=http)
-    return result
+    
+    try:
+      http = decorator.http()
+      result = service.trainedmodels().predict(project=PROJECT_ID, id=user_id, body=body).execute(http=http)
+      return result
+    except:
+      ## hack hack
+      pass
+    
+    return None
 
 
 def main():

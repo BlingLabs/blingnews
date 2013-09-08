@@ -6,7 +6,7 @@ import webapp2
 from google.appengine.api import memcache
 from google.appengine.api import rdbms
 
-#import predict as p
+import prediction as p
 
 #Database constants
 INSTANCE_NAME = 'blingpenn:blingsql'
@@ -119,22 +119,43 @@ class UserHandler(webapp2.RequestHandler):
     conn = rdbms.connect(instance=INSTANCE_NAME, database=DATABASE_NAME)
     cursor = conn.cursor()
 
-    SQL_GET_ARTICLE_IDS = 'SELECT id FROM articles'
-    cursor.execute(SQL_GET_ARTICLE_IDS)
+    SQL_GET_ARTICLES = 'SELECT * FROM articles a INNER JOIN sources s'
+    cursor.execute(SQL_GET_ARTICLES)
     if cursor.rowcount == -1:
       # There are no article.
       return None
 
+    recommended = []
     for article in cursor.fetchall():
       # Run prediction to see if this use is interested in article
+      print article
       article_id = article[0]
+
       # get tags of the article
       SQL_GET_ARTICLE_TAGS = 'SELECT tag FROM tags WHERE article_id = %s'
+      cursor.execute(SQL_GET_ARTICLE_TAGS, (article_id))
 
+      for tag in cursor.fetchall():
+        result = p.Predict.predict(user_id, [tag[0]])
+        if result != None:
+          if result.outputLabel == '1':
+            # TODO:for now, If one tag passes, we pass.
+            # keep score
+            for r in result['outputMulti']:
+              if r['label'] == '1':
+                score = r['score']
 
+            # Give this article to the user, in order of scores
+            for i in range(0, recommended.len):
+              if float(recommended[i].score) < float(score):
+                recommended.insert(i, {'score': score, 'article': article})
+        else:
+          # If we can't predict, simply serve.
+          logging.debug('could not predict for tag=' + tag[0])
+          recommended.append({'score': 0, 'article': article})
 
-
-
+    print recommended
+    return recommended
 
 
   def get_simple_attr(self, user_id, attr):
