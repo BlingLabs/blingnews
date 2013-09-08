@@ -107,11 +107,10 @@ class UserHandler(webapp2.RequestHandler):
     name = self.get_simple_attr(user_id, 'name')
 
     if name is None:
-      logging.error('no result from db')
-      self.error(400)
-      return
+      json_resp = json.dumps([])
+    else:
+      json_resp = json.dumps([{'name': name, 'fb_id': user_id}])
 
-    json_resp = json.dumps({'name': name, 'fb_id': user_id})
     self.response.out.write(json_resp)
 
 
@@ -160,8 +159,11 @@ class UserHandler(webapp2.RequestHandler):
         id: string (fb id)
         name: string
     """
-    id = self.request.get('fb_id')
-    name = self.request.get('name')
+    data = json.loads(self.request.body)
+    id = data['fb_id']
+    name = data['name']
+    logging.debug(id)
+    logging.debug(name)
 
     conn = rdbms.connect(instance=INSTANCE_NAME, database=DATABASE_NAME)
     cursor = conn.cursor()
