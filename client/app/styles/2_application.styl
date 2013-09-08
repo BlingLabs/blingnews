@@ -75,6 +75,28 @@ body {
     }
   }
 
+  .header.default {
+    display: none;
+
+    a {
+      text-decoration: none;
+      color: $white;
+    }
+
+    span {
+      font-size: 0.8em;
+      color: #999;
+
+      a {
+        font-family: 'Varela Round', Helvetica, Arial, sans-serif;
+        font-size: 0.78em;
+        border-bottom-style: dotted;
+        border-bottom-width: 1px;
+        border-bottom-color: $light-gray;
+      }
+    }
+  }
+
   ul.articles {
     margin: 0;
     padding: 0;
@@ -96,6 +118,13 @@ body {
       &:hover {
         background: $light-yellow;
       }
+
+      .item-meta {
+        font-family: 'Varela Round', Helvetica, Arial, sans-serif;
+        font-size: 0.8em;
+        line-height: 1.8em;
+        text-transform: lowercase;
+      }
     }
   }
 }
@@ -112,13 +141,15 @@ body {
   transition: 0.5s;
 
   .meta {
+    font-family: 'Varela Round', Helvetica, Arial, sans-serif;
     font-size: 0.8em;
     margin: 0 0 4em 0;
+    line-height: 2.5em;
   }
 
   .article-body {
     img {
-      margin: 0 30px 15px 0 !important;
+      margin: 0 2em 1.5em 0 !important;
     }
   }
 
@@ -212,7 +243,7 @@ h1 {
 }
 
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 0.6em;
 }
 
 ::-webkit-scrollbar-track {
