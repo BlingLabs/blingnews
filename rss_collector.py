@@ -34,7 +34,6 @@ def find_tags_verge(site_url):
   site_to_scrape = urlopen(site_url)
 
   # dump site html
-  # site_to_scrape = open(site_url,'r')
   page_html = site_to_scrape.read()
 
   # get tags from the section
@@ -42,21 +41,47 @@ def find_tags_verge(site_url):
   matches = re.findall(pattern,page_html)
   return matches
 
+
 def build_rss_data_techcrunch(techcrunch_feed):
+  return build_rss_data_generic(techcrunch_feed)
+
+def find_tags_huffingtonpost(site_url):
+  # need to get all the feed
+  site_to_scrape = urlopen(site_url)
+
+  # dump site html
+  page_html = site_to_scrape.read()
+
+  # get tags from the section
+  pattern = re.compile('(?<=<a href="/news/)[a-z\-\/]+(?=">|" )')
+  matches = re.findall(pattern,page_html)
+  return matches
+
+def build_rss_data_huffingtonpost(huffingtonpost_feed):
   rss_data = []
-  for entry in techcrunch_feed.entries:
+  for entry in huffingtonpost_feed.entries:
+    data = {'title':entry.title,
+        'link': entry.link,
+        'tags': find_tags_huffingtonpost(entry.link),
+        'body': entry.description,
+        'date': str(dateparser.parse(entry.published))}
+    rss_data.append(data)
+  return rss_data
+
+def build_rss_data_generic(gen_feed):
+  rss_data = []
+  for entry in gen_feed.entries:
     data = {'title':entry.title,
         'link': entry.link,
         'tags': [tag.term for tag in entry.tags],
         'body': entry.description,
         'date': str(dateparser.parse(entry.published))}
     rss_data.append(data)
-
   return rss_data
 
 def get_rss_data():
-  feeds_list = {"http://www.theverge.com/rss/index.xml": "verge", "http://www.engadget.com/rss.xml":"engadget"}
-  feeds_list = {"http://feeds.feedburner.com/Techcrunch": "techcrunch"}
+  # feeds_list = {"http://www.theverge.com/rss/index.xml": "verge", "http://www.engadget.com/rss.xml":"engadget","http://feeds.feedburner.com/Techcrunch": "techcrunch"}
+  feeds_list = {"http://feeds.huffingtonpost.com/huffingtonpost/raw_feed": "huffingtonpost"}
 
   # pull down all feeds
   future_calls = [(Future(feedparser.parse,x),feeds_list.get(x)) for x in feeds_list.keys()]
