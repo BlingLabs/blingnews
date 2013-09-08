@@ -17,7 +17,9 @@ def run_training(output_file):
     source_name,articles = entry
     print("Now looking at articles for: " + source_name)
     for article in articles:
-      title,link,tags = article
+      title = article.get('title')
+      link = article.get('link')
+      tags = article.get('tags')
       print (title)
       print (tags)
       answer = raw_input("Do you like this article? (1 or 0): ")

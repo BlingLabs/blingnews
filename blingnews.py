@@ -2,7 +2,6 @@ import webapp2
 
 import prediction
 import rss_collector
-import scraper
 
 
 class MainPage(webapp2.RequestHandler):
@@ -14,5 +13,9 @@ class MainPage(webapp2.RequestHandler):
 application = webapp2.WSGIApplication([
   ('/', MainPage),
   ('/prediction', prediction.Prediction),
+  ('/prediction/modelstatus', prediction.CheckModelStatus),
+  ('/prediction/predict', prediction.Predict),
+  ('/prediction/createmodel', prediction.CreateModel),
+  ('/prediction/updatemodel', prediction.UpdateModel),
   (prediction.decorator.callback_path, prediction.decorator.callback_handler()) #Oauth dance
 ], debug=True)
