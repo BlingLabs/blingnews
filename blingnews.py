@@ -19,7 +19,8 @@ class MainPage(webapp2.RequestHandler):
 application = webapp2.WSGIApplication([
   ('/', MainPage),
   ('/api/users.json', db.UserHandler), #create /api/user.json
-  ('/api/articles.json', db.ArticleHandler), #create /api/article.json
+  ('/api/articles.json', db.ArticleHandler),
   ('/prediction', prediction.Prediction),
+  ('/loadarticles', rss_collector.Loader),
   (prediction.decorator.callback_path, prediction.decorator.callback_handler()) #Oauth dance
 ], debug=True)

@@ -2,8 +2,10 @@ from urllib import urlopen
 import string
 import re
 import feedparser
+import webapp2
 from future import Future
 from dateutil import parser as dateparser
+from database import db
 
 def build_rss_data_verge(verge_feed):
   rss_data = []
@@ -80,8 +82,8 @@ def build_rss_data_generic(gen_feed):
   return rss_data
 
 def get_rss_data():
-  # feeds_list = {"http://www.theverge.com/rss/index.xml": "verge", "http://www.engadget.com/rss.xml":"engadget","http://feeds.feedburner.com/Techcrunch": "techcrunch"}
-  feeds_list = {"http://feeds.huffingtonpost.com/huffingtonpost/raw_feed": "huffingtonpost"}
+  feeds_list = {"http://www.theverge.com/rss/index.xml": "verge", "http://www.engadget.com/rss.xml":"engadget","http://feeds.feedburner.com/Techcrunch": "techcrunch"}
+  #feeds_list = {"http://feeds.huffingtonpost.com/huffingtonpost/raw_feed": "huffingtonpost"}
 
   # pull down all feeds
   future_calls = [(Future(feedparser.parse,x),feeds_list.get(x)) for x in feeds_list.keys()]
@@ -93,4 +95,22 @@ def get_rss_data():
     rss_data.append((source_name, globals()["build_rss_data_" + source_name](feed)))
 
   return rss_data
+
+
+class Loader(webapp2.RequestHandler):
+  def get(self):
+    result_by_sources = get_rss_data()
+
+    for source in result_by_sources:
+      source_name = source[0]
+      for article in source[1]:
+        title = article['title']
+        link = article['link']
+        body = article['body']
+        date = article['date']
+        tags = article['tags']
+        db.insert_article(source_name, title, link, body, date, tags)
+
+
+
 

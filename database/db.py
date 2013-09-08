@@ -13,76 +13,92 @@ INSTANCE_NAME = 'blingpenn:blingsql'
 DATABASE_NAME = 'blingnews'
 
 
+def insert_article(source, title, link, body, date, tags):
+  """ Put article in database.
+    Args:
+      source: string
+      title: string
+      link: string
+      body: string
+      date: string
+      tags: json ['tag1', 'tag2']
+  """
+  conn = rdbms.connect(instance=INSTANCE_NAME, database=DATABASE_NAME)
+  cursor = conn.cursor()
+
+  # make sure source is in database
+  SQL_INSERT_SOURCE = 'INSERT IGNORE INTO sources (name) VALUES (%s)'
+  cursor.execute(SQL_INSERT_SOURCE, (source))
+
+  SQL_GET_SOURCE_ID = 'SELECT id FROM sources where name like %s'
+  cursor.execute(SQL_GET_SOURCE_ID, (source))
+  if cursor.rowcount == -1:
+    #Source doesn't exist in database still.
+    logging.error('db insert error')
+    self.error(500)
+    return
+
+  source_id = cursor.fetchone()[0]
+
+  # insert article
+  SQL_INSERT_ARTICLE = 'INSERT INTO articles (title, link, body, source_id, date) VALUES (%s, %s, %s, %s, %s)'
+  cursor.execute(SQL_INSERT_ARTICLE, (title, link, body, str(source_id), date))
+
+  if cursor.rowcount > 0:
+    # Get the id of article for inserting tags
+    cursor.execute('SELECT last_insert_id()')
+    article_id = cursor.fetchone()[0]
+    print 'article id = ' + str(article_id)
+  else:
+    article_id = None
+
+  # Insert article tags
+  values = []
+  for tag in tags:
+    values.append((article_id, tag))
+
+  SQL_INSERT_TAG = 'INSERT INTO tags (article_id, tag) VALUES (%s, %s)'
+  cursor.executemany(SQL_INSERT_TAG, values)
+
+  conn.commit()
+  conn.close()
+
+
 class ArticleHandler(webapp2.RequestHandler):
-  def get(self, user_id, attr):
-    pass
-
-  def post(self):
-    """ Put article in database.
-      Args:
-        title: string
-        link: string
-        body: string
-        author: string
-        source: string
-        date: string
-        tags: json ['tag1', 'tag2']
-    """
-    #title = self.request.get('title')
-    #link = self.request.get('link')
-    #body = self.request.get('body')
-    #author = self.request.get('author')
-    #source = self.request.get('source')
-    #date = self.request.get('date')
-    #tags = json.loads(self.request.get('tags'))
-
-    title = 'title'
-    link = 'www.google.com'
-    body = 'some text'
-    author = 'tim cheng'
-    source = 'the google'
-    date = '1003-01-01'
-    tags = ['lol', 'cool', 'sucks']
-
+  def get(self):
+    # Get all articles
     conn = rdbms.connect(instance=INSTANCE_NAME, database=DATABASE_NAME)
     cursor = conn.cursor()
 
-    # make sure source is in database
-    SQL_INSERT_SOURCE = 'INSERT IGNORE INTO sources (name) VALUES (%s)'
-    cursor.execute(SQL_INSERT_SOURCE, (source))
-
-    SQL_GET_SOURCE_ID = 'SELECT id FROM sources where name like %s'
-    cursor.execute(SQL_GET_SOURCE_ID, (source))
+    SQL_GET_ARTICLES = 'SELECT * FROM articles a JOIN sources s WHERE a.source_id = s.id'
+    cursor.execute(SQL_GET_ARTICLES)
+    print cursor.rowcount
     if cursor.rowcount == -1:
-      #Source doesn't exist in database still.
-      logging.error('db insert error')
-      self.error(500)
-      return
+      # There are no article.
+      return None
 
-    source_id = cursor.fetchone()[0]
+    count = 0
+    recommended = []
+    for article in cursor.fetchall():
+      print article
+      # Run prediction to see if this use is interested in article
+      article_obj = {
+          'id': article[0],
+          'title': article[1],
+          'link': article[2],
+          'body': article[3],
+          'source_id': article[4],
+          'date': article[5],
+          'source_name': article[7]
+      }
+      # If we can't predict, simply serve.
+      article_obj['score'] = 0
+      recommended.append(article_obj)
+      count = count+1
 
-    # insert article
-    SQL_INSERT_ARTICLE = 'INSERT INTO articles (title, link, body, author, source_id, date) VALUES (%s, %s, %s, %s, %s, %s)'
-    cursor.execute(SQL_INSERT_ARTICLE, (title, link, body, author, str(source_id), date))
-
-    if cursor.rowcount > 0:
-      # Get the id of article for inserting tags
-      cursor.execute('SELECT last_insert_id()')
-      article_id = cursor.fetchone()[0]
-      print 'article id = ' + str(article_id)
-    else:
-      article_id = None
-
-    # Insert article tags
-    values = []
-    for tag in tags:
-      values.append((article_id, tag))
-
-    SQL_INSERT_TAG = 'INSERT INTO tags (article_id, tag) VALUES (%s, %s)'
-    cursor.executemany(SQL_INSERT_TAG, values)
-
-    conn.commit()
-    conn.close()
+    print count
+    json_resp = json.dumps(recommended)
+    self.response.out.write(json_resp)
 
 
 class UserHandler(webapp2.RequestHandler):
@@ -141,10 +157,9 @@ class UserHandler(webapp2.RequestHandler):
           'title': article[1],
           'link': article[2],
           'body': article[3],
-          'author': article[4],
-          'source_id': article[5],
-          'date': article[6],
-          'source_name': article[8]
+          'source_id': article[4],
+          'date': article[5],
+          'source_name': article[7]
       }
 
       for tag in cursor.fetchall():
