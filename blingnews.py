@@ -6,9 +6,11 @@ import rss_collector
 
 class MainPage(webapp2.RequestHandler):
   def get(self):
-    self.response.headers['Content-Type'] = 'text/plain'
-    self.response.write(rss_collector.get_rss_data())
+    self.response.headers['Content-Type'] = 'text/html'
+    self.response.write('<h1>hello</h1><h2>there</h2>')
 
+    # self.response.headers['Content-Type'] = 'text/plain'
+    # self.response.write(rss_collector.get_rss_data())
 
 application = webapp2.WSGIApplication([
   ('/', MainPage),
