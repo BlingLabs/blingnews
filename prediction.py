@@ -1,6 +1,4 @@
 import httplib2
-import urllib
-import urllib2
 import webapp2
 from apiclient.discovery import build
 from oauth2client.appengine import AppAssertionCredentials
@@ -53,9 +51,10 @@ class CreateModel(webapp2.RequestHandler):
     user_id = self.request.get('user_id')
     self.create_model(user_id)
 
+  @decorator.oauth_aware
   def get(self):
     user_id = MODEL_ID
-    self.create_model(user_id)
+    result = self.create_model(user_id)
 
     self.response.headers['Content-Type'] = 'text/plain'
     self.response.out.write('Result: ' + repr(result) + '\n')
@@ -86,13 +85,34 @@ class CreateModel(webapp2.RequestHandler):
             'csvInstance': [
               'health'
             ]
+          },
+          {
+            'output': 'false',
+            'csvInstance': [
+              'health'
+            ]
+          },
+          {
+            'output': 'false',
+            'csvInstance': [
+              'health'
+            ]
+          },
+          {
+            'output': 'false',
+            'csvInstance': [
+              'health'
+            ]
           }
         ]
     }
 
     http = decorator.http()
+    if http == None:
+      print 'huh?'
     result = service.trainedmodels().insert(project=PROJECT_ID, body=body).execute(http=http)
     return result
+
 
   def create_model_with_training_set(self, user_id, training_set):
     """ Creates model with training set
@@ -146,7 +166,7 @@ class UpdateModel(webapp2.RequestHandler):
 class CheckModelStatus(webapp2.RequestHandler):
   @decorator.oauth_aware
   def get(self):
-    user_id = self.request.get('user_id')
+    user_id = MODEL_ID
     result = self.get_model_status(user_id)
     self.response.headers['Content-Type'] = 'text/plain'
     self.response.out.write('Result: ' + repr(result) + '\n')
@@ -161,7 +181,7 @@ class Predict(webapp2.RequestHandler):
   @decorator.oauth_aware
   def get(self):
     user_id = MODEL_ID
-    input = ['health']
+    input = ['science']
     result = self.predict(user_id, input)
     self.response.headers['Content-Type'] = 'text/plain'
     self.response.out.write('Result: ' + repr(result) + '\n')

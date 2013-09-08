@@ -3,6 +3,7 @@ import os
 
 import prediction
 import rss_collector
+from database.db import UserHandler
 
 from google.appengine.ext.webapp import template
 
@@ -17,6 +18,8 @@ class MainPage(webapp2.RequestHandler):
 
 application = webapp2.WSGIApplication([
   ('/', MainPage),
+  ('/api/user', UserHandler), #create /api/user
+  ('/api/user/(\d)+/(.*)', UserHandler), #eg. get /api/user/123/name
   ('/prediction', prediction.Prediction),
   (prediction.decorator.callback_path, prediction.decorator.callback_handler()) #Oauth dance
 ], debug=True)
