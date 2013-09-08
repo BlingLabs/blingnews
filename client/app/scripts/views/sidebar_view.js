@@ -1,4 +1,4 @@
-require('scripts/views/full_height_view');
+require('scripts/mixins/dynamic_sizing');
+require('scripts/models/article');
 
-App.SidebarView = App.FullHeightView.extend({
-});
+App.SidebarView = Ember.View.extend(App.FillHeight, {});

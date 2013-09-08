@@ -1,7 +1,3 @@
-require('scripts/views/full_height_view');
+require('scripts/mixins/dynamic_sizing');
 
-App.ArticleView = App.FullHeightView.extend({
-  dismiss: function() {
-
-  }
-});
+App.ArticleView = Ember.View.extend(App.FillHeight, {});
