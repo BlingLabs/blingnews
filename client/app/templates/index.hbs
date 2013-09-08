@@ -18,8 +18,11 @@
             <h1>
                 {{activeArticle.title}}
             </h1>
+            <div class="meta">
+                <span class="author">{{activeArticle.author}}</span> | <span class="date">{{activeArticle.date}}</span>
+            </div>
 
-            {{activeArticle.body}}
+            {{{activeArticle.body}}}
 
             <div class="endbar">
                 Did you like this article?
