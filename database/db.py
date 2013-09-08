@@ -3,7 +3,10 @@ import logging
 import re
 import unicodedata
 import webapp2
+from google.appengine.api import memcache
 from google.appengine.api import rdbms
+
+#import predict as p
 
 #Database constants
 INSTANCE_NAME = 'blingpenn:blingsql'
@@ -59,7 +62,7 @@ class ArticleHandler(webapp2.RequestHandler):
 class UserHandler(webapp2.RequestHandler):
   def get(self):
     """ Get the specified attribute. """
-    user_id = self.request.get('id')
+    user_id = self.request.get('fb_id')
     #attr = self.request.get('attr')
 
     if re.match('[a-zA-z\d]+', user_id) is None:
@@ -82,12 +85,30 @@ class UserHandler(webapp2.RequestHandler):
       self.error(400)
       return
 
-    json_resp = json.dumps({'name': name, 'id': user_id})
+    json_resp = json.dumps({'name': name, 'fb_id': user_id})
     self.response.out.write(json_resp)
 
 
   def get_user_articles(self, user_id):
-    pass
+    # Get all articles
+    conn = rdbms.connect(instance=INSTANCE_NAME, database=DATABASE_NAME)
+    cursor = conn.cursor()
+
+    SQL_GET_ARTICLE_IDS = 'SELECT id FROM articles'
+    cursor.execute(SQL_GET_ARTICLE_IDS)
+    if cursor.rowcount == -1:
+      # There are no article.
+      return None
+
+    #for article_id in cursor.fetchall():
+    #  # Run prediction to see if this use is interested in article
+    #  print article_id[0]
+    #  p.Predict
+
+
+
+
+
 
 
   def get_simple_attr(self, user_id, attr):
@@ -109,10 +130,10 @@ class UserHandler(webapp2.RequestHandler):
     """ Create user.
 
       Args:
-        id: string (fb token)
+        id: string (fb id)
         name: string
     """
-    id = self.request.get('id')
+    id = self.request.get('fb_id')
     name = self.request.get('name')
 
     conn = rdbms.connect(instance=INSTANCE_NAME, database=DATABASE_NAME)
