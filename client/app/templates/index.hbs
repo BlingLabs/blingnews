@@ -1,15 +1,16 @@
 <div class="row">
     <div class="side col">
-        <div class="header signed-in">
+        <div class="header">
             <a href="/"><img class="logo" src="../images/logo-white.svg"/></a>
-            Today's Top Reads for Sarah
+            Today's Top Reads for
+            {{#if user}}
+                {{user.name}}
+            {{else}}
+                Everyone
+                <div class="logged-out"><a href="/" {{action "login"}}>SIGNUP</a> to get reads tailored for you</div>
+            {{/if}}
         </div>
 
-        <div class="header default">
-            <a href="/"><img class="logo" src="../images/logo-white.svg"/></a>
-            Today's Top Reads for Everyone
-            <span><a href="">SIGNUP</a> to get reads tailored for you</span>
-        </div>
         {{#view "App.SidebarView" controllerBinding="articles" tagName="ul" classNames="articles"}}
             {{#each article in content}}
                 <li {{action "open" article}}>
