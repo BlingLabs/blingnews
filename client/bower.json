@@ -5,7 +5,8 @@
     "jquery": "~1.9.1",
     "ember": "~1.0.0",
     "ember-model": "~0.0.10",
-    "handlebars": "~1.0.0"
+    "handlebars": "~1.0.0",
+    "momentjs": "~2.1.0"
   },
   "devDependencies": {
     "ember-mocha-adapter": "0.1.1"

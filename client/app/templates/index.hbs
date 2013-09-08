@@ -20,7 +20,7 @@
                 {{activeArticle.title}}
             </h1>
             <div class="meta">
-                <span class="author">{{activeArticle.author}}</span> | <span class="date">{{activeArticle.date}}</span>
+                <span class="author">{{activeArticle.author}}</span> | <span class="date">{{timestamp activeArticle.date format="lll"}}</span>
             </div>
 
             <div class="article-body">
