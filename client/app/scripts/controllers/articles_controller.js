@@ -29,5 +29,12 @@ App.ArticlesController = Ember.ArrayController.extend({
       article.set('liked', false);
       article.save();
     }
+  },
+
+  arrayContentDidChange: function() {
+    var first = this.get('content.firstObject');
+    if (!Ember.isNone(first) && Ember.isNone(this.get('activeArticle'))) {
+      this.set('activeArticle', first);
+    }
   }
 });
