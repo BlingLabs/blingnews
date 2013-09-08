@@ -10,7 +10,7 @@ import prediction as p
 
 #Database constants
 INSTANCE_NAME = 'blingpenn:blingsql'
-DATABASE_NAME = 'blingnews'
+DATABASE_NAME = 'blingreader'
 
 
 def insert_article(source, title, link, body, date, tags):
@@ -53,12 +53,12 @@ def insert_article(source, title, link, body, date, tags):
     article_id = None
 
   # Insert article tags
-  values = []
-  for tag in tags:
-    values.append((article_id, tag))
+  #values = []
+  #for tag in tags:
+  #  values.append((article_id, tag))
 
-  SQL_INSERT_TAG = 'INSERT INTO tags (article_id, tag) VALUES (%s, %s)'
-  cursor.executemany(SQL_INSERT_TAG, values)
+  #SQL_INSERT_TAG = 'INSERT INTO tags (article_id, tag) VALUES (%s, %s)'
+  #cursor.executemany(SQL_INSERT_TAG, values)
 
   conn.commit()
   conn.close()
