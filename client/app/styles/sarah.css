@@ -1,14 +1,10 @@
-/* Let's get this party started */
+/*Scrollbars*/
 ::-webkit-scrollbar {
     width: 8px;
 }
- 
-/* Track */
 ::-webkit-scrollbar-track {
     background: #dedede;
 }
- 
-/* Handle */
 ::-webkit-scrollbar-thumb {
     background: #bebebe; 
 }
@@ -16,10 +12,7 @@
 	background: rgba(255,0,0,0.4); 
 }
 
-
-
-
-
+/*Classes for yes/no transition, add class .clicked*/
 .yes, .no {
     display: inline-block;
     width: 30px;
