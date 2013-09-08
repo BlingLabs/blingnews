@@ -7,7 +7,7 @@ link varchar(255) NOT NULL,
 body TEXT NOT NULL,
 author varchar(255),
 source_id int NOT NULL,
-date DATE NOT NULL,
+date varchar(255) NOT NULL,
 PRIMARY KEY(id)
 );
 
@@ -25,7 +25,8 @@ PRIMARY KEY(id)
 
 CREATE TABLE sources (
 id int NOT NULL AUTO_INCREMENT,
-name varchar(255) NOT NULL
+name varchar(255) NOT NULL,
+PRIMARY KEY(id)
 );
 
 CREATE TABLE subscriptions (
