@@ -13,7 +13,7 @@
 
         {{#view "App.SidebarView" controllerBinding="articles" tagName="ul" classNames="articles"}}
             {{#each article in content}}
-                <li {{action "open" article}}>
+                <li {{bind-attr class="article.liked:yes article.disliked:no"}} {{action "open" article}}>
                     <div class="item-title">{{article.title}}</div>
                     <div class="item-meta">{{article.source}}</div>
                 </li>

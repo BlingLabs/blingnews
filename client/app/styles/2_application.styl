@@ -8,6 +8,8 @@ $dark-gray = #666666
 $black = #232323
 $light-yellow = #FFFCF4
 $yellow = #FFFAE6
+$green = #70B131
+$red = #B65025
 
 @font-face {
   font-family: 'Museo300Regular';
@@ -107,6 +109,19 @@ body {
       list-style-type: none;
       padding: 2em;
       transition: 0.25s;
+
+      border-left-style: solid;
+      border-left-width: 0px;
+
+      &.yes {
+        border-left-width: 1.25em;
+        border-left-color: $green;
+      }
+
+      &.no {
+        border-left-width: 1.25em;
+        border-left-color: $red;
+      }
 
       &:hover {
         background: $light-yellow;

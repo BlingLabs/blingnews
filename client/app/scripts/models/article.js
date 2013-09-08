@@ -9,7 +9,9 @@ App.Article = Ember.Model.extend({
   disliked: Ember.attr()
 });
 
+App.Article.url = '/api/articles';
 App.Article.adapter = Ember.FixtureAdapter.create();
+App.Article.camelizeKeys = true;
 
 App.Article.FIXTURES = [
   {
@@ -47,7 +49,7 @@ App.Article.FIXTURES = [
   },
   {
     id: 2,
-    title: 'Scholly Helps Students Find Their Ideal Scholarships On Their Smartphones',
+    title: 'Scholly Helps Students Ideal Scholarships On Their Smartphones',
     date: new Date(),
     author: 'John Smith',
     body: '<img alt="crunchies monkey selfie" class="attachment-tc-carousel-river-thumb wp-post-image" height="70" src="http://tctechcrunch2011.files.wordpress.com/2013/09/crunchies-monkey-selfie.png?w=100&amp;h=70&amp;crop=1" style="float: left; margin: 0 10px 7px 0;" width="100" />It\u2019s not often that we get to see the Crunchies Monkey. When he\u2019s not busy shopping at the Facebook Store or taking a Lyft from Square to the TechCrunch office, he\u2019s usually working hard to identify the hottest new startups to launch every year. Today, the TC Disrupt Hackathon got a surprise visit from the Crunchies Monkey, who had fun giving high-fives and seeing what folks are hacking on.',

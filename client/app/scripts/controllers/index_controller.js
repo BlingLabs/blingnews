@@ -2,10 +2,12 @@ require('scripts/controllers/articles_controller');
 
 App.IndexController = Ember.Controller.extend({
   user: null,
+  users: null,
+  fbId: 0,
 
   actions: {
     login: function() {
-      if (Ember.isNone(this.get('user'))) {
+      if (Ember.isNone(this.get('users'))) {
         var FB = window.FB;
         FB.login(function(response) {
           if (response.authResponse) {
@@ -17,8 +19,20 @@ App.IndexController = Ember.Controller.extend({
   },
 
   userDidChange: function() {
-    console.log(this.get('user'));
-  }.observes('user'),
+    var self = this;
+    var users = self.get('users');
+    if (users.get('isLoaded')) {
+      if (!Ember.isNone(users.get('firstObject'))) {
+        self.set('user', users.get('firstObject'));
+      } else {
+        FB.api('/me', function(response) {
+          var user = App.User.create({ fbId: self.get('fbId'), name: response.name });
+          user.save();
+          self.set('user', user);
+        });
+      }
+    }
+  }.observes('users.isLoaded'),
 
   init: function() {
     var self = this;
@@ -33,9 +47,10 @@ App.IndexController = Ember.Controller.extend({
       });
 
       FB.Event.subscribe('auth.authResponseChange', function(response) {
-        console.log(response);
         if (response.authResponse) {
-          self.set('user', App.User.find({ id: response.authResponse.userID }));
+          var fbId = response.authResponse.userID;
+          self.set('fbId', fbId);
+          self.set('users', App.User.find({ 'fb_id': fbId }));
         }
       });
     };
