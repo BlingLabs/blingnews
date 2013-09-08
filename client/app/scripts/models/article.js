@@ -4,7 +4,9 @@ App.Article = Ember.Model.extend({
   author: Ember.attr(),
   body: Ember.attr(),
   link: Ember.attr(),
-  source: Ember.attr()
+  source: Ember.attr(),
+  liked: Ember.attr(),
+  disliked: Ember.attr()
 });
 
 App.Article.adapter = Ember.FixtureAdapter.create();
@@ -39,7 +41,9 @@ App.Article.FIXTURES = [
       'had a number of happy customers, and the service will be missed.\nStill, it seems inevitable there will be some ' +
       'consolidation in the personalized e-commerce space in the months ahead, so stay tuned.',
     link: 'http://www.techcrunch.com',
-    source: 'TechCrunch'
+    source: 'TechCrunch',
+    liked: false,
+    disliked: false
   },
   {
     id: 2,
@@ -70,7 +74,9 @@ App.Article.FIXTURES = [
       'had a number of happy customers, and the service will be missed.\nStill, it seems inevitable there will be some ' +
       'consolidation in the personalized e-commerce space in the months ahead, so stay tuned.',
     link: 'http://www.techcrunch.com',
-    source: 'TechCrunch'
+    source: 'TechCrunch',
+    liked: false,
+    disliked: false
   },
   {
     id: 3,
@@ -101,7 +107,9 @@ App.Article.FIXTURES = [
       'had a number of happy customers, and the service will be missed.\nStill, it seems inevitable there will be some ' +
       'consolidation in the personalized e-commerce space in the months ahead, so stay tuned.',
     link: 'http://www.techcrunch.com',
-    source: 'TechCrunch'
+    source: 'TechCrunch',
+    liked: false,
+    disliked: false
   },
   {
     id: 4,
@@ -132,6 +140,8 @@ App.Article.FIXTURES = [
       'had a number of happy customers, and the service will be missed.\nStill, it seems inevitable there will be some ' +
       'consolidation in the personalized e-commerce space in the months ahead, so stay tuned.',
     link: 'http://www.techcrunch.com',
-    source: 'TechCrunch'
+    source: 'TechCrunch',
+    liked: false,
+    disliked: false
   }
 ];

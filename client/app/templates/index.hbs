@@ -23,10 +23,10 @@
 
             <div class="endbar">
                 Did you like this article?
-                <span class="vote yes"></span>
-                <span class="vote-top yes" {{action "like" activeArticle}}></span>
-                <span class="vote no"></span>
-                <span class="vote-top no" {{action "dislike" activeArticle}}></span>
+                <span {{bind-attr class=":vote :yes activeArticle.liked:clicked"}} {{action "like" activeArticle}}></span>
+                <span {{bind-attr class=":vote-top :yes activeArticle.liked:clicked"}} {{action "like" activeArticle}}></span>
+                <span {{bind-attr class=":vote :no activeArticle.disliked:clicked"}} {{action "dislike" activeArticle}}></span>
+                <span {{bind-attr class=":vote-top :no activeArticle.disliked:clicked"}} {{action "dislike" activeArticle}}></span>
             </div>
         {{else}}
             :(

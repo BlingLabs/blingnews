@@ -19,9 +19,15 @@ App.ArticlesController = Ember.ArrayController.extend({
     },
 
     like: function(article) {
+      article.toggleProperty('liked');
+      article.set('disliked', false);
+      article.save();
     },
 
     dislike: function(article) {
+      article.toggleProperty('disliked');
+      article.set('liked', false);
+      article.save();
     }
   }
 });

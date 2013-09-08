@@ -106,6 +106,7 @@ body {
     background-color: $black;
 
     .vote {
+      cursor: pointer;
       display: inline-block;
       width: 2em;
       height: 2em;
@@ -113,7 +114,6 @@ body {
       background-size: cover;
       vertical-align: middle;
       opacity: 0.8;
-      transition: 0.25s;
 
       &.yes {
         background-image: url('../images/yes.svg');
@@ -138,25 +138,23 @@ body {
       margin: 0 0 0 -2.4em;
       opacity: 1;
       vertical-align: middle;
-      transition: 0.2s;
+      transition: transform 0.25s, opacity 0.5s ease-out, height 0s step-start;
       transform: scale(1);
 
-      .yes {
+      &.yes {
         background-image: url('../images/yes.svg');
       }
 
-      .no {
+      &.no {
         background-image: url('../images/no.svg');
-      }
-
-      &:hover {
-        opacity: 0;
       }
 
       &.clicked {
         background-position: 0;
-        transform: scale(6);
         opacity: 0;
+        height: 0;
+        transition: transform 0.25s, opacity 0.5s ease-out, height 0.5s step-start 0.5s;
+        transform: scale(6);
       }
     }
   }
