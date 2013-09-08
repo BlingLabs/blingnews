@@ -26,13 +26,23 @@ class ArticleHandler(webapp2.RequestHandler):
         author: string
         source: string
         date: string
+        tags: json ['tag1', 'tag2']
     """
-    title = self.request.get('title')
-    link = self.request.get('link')
-    body = self.request.get('body')
-    author = self.request.get('author')
-    source = self.request.get('source')
-    date = self.request.get('date')
+    #title = self.request.get('title')
+    #link = self.request.get('link')
+    #body = self.request.get('body')
+    #author = self.request.get('author')
+    #source = self.request.get('source')
+    #date = self.request.get('date')
+    #tags = json.loads(self.request.get('tags'))
+
+    title = 'title'
+    link = 'www.google.com'
+    body = 'some text'
+    author = 'tim cheng'
+    source = 'the google'
+    date = '1003-01-01'
+    tags = ['lol', 'cool', 'sucks']
 
     conn = rdbms.connect(instance=INSTANCE_NAME, database=DATABASE_NAME)
     cursor = conn.cursor()
@@ -54,6 +64,22 @@ class ArticleHandler(webapp2.RequestHandler):
     # insert article
     SQL_INSERT_ARTICLE = 'INSERT INTO articles (title, link, body, author, source_id, date) VALUES (%s, %s, %s, %s, %s, %s)'
     cursor.execute(SQL_INSERT_ARTICLE, (title, link, body, author, str(source_id), date))
+
+    if cursor.rowcount > 0:
+      # Get the id of article for inserting tags
+      cursor.execute('SELECT last_insert_id()')
+      article_id = cursor.fetchone()[0]
+      print 'article id = ' + str(article_id)
+    else:
+      article_id = None
+
+    # Insert article tags
+    values = []
+    for tag in tags:
+      values.append((article_id, tag))
+
+    SQL_INSERT_TAG = 'INSERT INTO tags (article_id, tag) VALUES (%s, %s)'
+    cursor.executemany(SQL_INSERT_TAG, values)
 
     conn.commit()
     conn.close()
@@ -100,10 +126,11 @@ class UserHandler(webapp2.RequestHandler):
       # There are no article.
       return None
 
-    #for article_id in cursor.fetchall():
-    #  # Run prediction to see if this use is interested in article
-    #  print article_id[0]
-    #  p.Predict
+    for article in cursor.fetchall():
+      # Run prediction to see if this use is interested in article
+      article_id = article[0]
+      # get tags of the article
+      SQL_GET_ARTICLE_TAGS = 'SELECT tag FROM tags WHERE article_id = %s'
 
 
 
