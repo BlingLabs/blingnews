@@ -1,7 +1,8 @@
 <div class="row">
     <div class="side col">
         <div class="header">
-            Top News Today for Sarah Hum
+            <a href="/"><img class="logo" src="../images/logo-white.svg"/></a>
+            Today's Top Reads for Sarah
         </div>
         {{#view "App.SidebarView" controllerBinding="articles" tagName="ul" classNames="articles"}}
             {{#each article in content}}
