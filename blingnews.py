@@ -2,8 +2,6 @@ import webapp2
 
 import prediction
 import rss_collector
-import scraper
-
 
 class MainPage(webapp2.RequestHandler):
   def get(self):

@@ -7,14 +7,25 @@ from future import Future
 def build_rss_data_verge(verge_feed):
   rss_data = []
   for entry in verge_feed.entries:
-    data = entry.title,entry.link,find_tags_verge(entry.link)
+    data = {'title':entry.title,
+        'link': entry.link,
+        'tags': find_tags_verge(entry.link),
+        'body': entry.content[0].get('value'),
+        'date': entry.published
+        }
     rss_data.append(data)
   return rss_data
 
 def build_rss_data_engadget(engadget_feed):
   rss_data = []
   for item in engadget_feed.entries:
-    rss_data.append((item.title,item.link,[tag.term for tag in item.tags]))
+    data = {'title':item.title,
+        'link': item.link,
+        'tags': [tag.term for tag in item.tags],
+        'body': item.description,
+        'date': item.published
+        }
+    rss_data.append(data)
   return rss_data
 
 def find_tags_verge(site_url):
