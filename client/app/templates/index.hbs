@@ -15,7 +15,7 @@
             {{#each article in content}}
                 <li {{bind-attr class="article.liked:yes article.disliked:no"}} {{action "open" article}}>
                     <div class="item-title">{{article.title}}</div>
-                    <div class="item-meta">{{article.source}}</div>
+                    <div class="item-meta">{{article.sourceName}}</div>
                 </li>
             {{/each}}
         {{/view}}
@@ -28,7 +28,7 @@
                 {{activeArticle.title}}
             </h1>
             <div class="meta">
-                <span class="author">{{activeArticle.author}}</span> | <span class="date">{{timestamp activeArticle.date format="lll"}}</span>
+                <span class="date">{{timestamp activeArticle.date format="lll"}}</span>
             </div>
 
             <div class="article-body">

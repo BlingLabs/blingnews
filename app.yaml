@@ -6,13 +6,13 @@ threadsafe: true
 
 handlers:
 - url: /styles
-  static_dir: client/dist/styles
+  static_dir: dist/styles
 
 - url: /images
-  static_dir: client/dist/images
+  static_dir: dist/images
 
 - url: /scripts
-  static_dir: client/dist/scripts
+  static_dir: dist/scripts
 
 - url: /.*
   script: blingnews.application
@@ -23,4 +23,4 @@ skip_files:
 - ^(.*/)?.*\.py[co]
 - ^(.*/)?.*/RCS/.*
 - ^(.*/)?\..*
-- ^client
+- ^(client)

@@ -13,9 +13,6 @@ class MainPage(webapp2.RequestHandler):
     self.response.headers['Content-Type'] = 'text/html'
     self.response.write(template.render(path, None))
 
-    # self.response.headers['Content-Type'] = 'text/plain'
-    # self.response.write(rss_collector.get_rss_data())
-
 application = webapp2.WSGIApplication([
   ('/', MainPage),
   ('/api/users.json', db.UserHandler), #create /api/user.json
